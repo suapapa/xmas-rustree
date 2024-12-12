@@ -4,7 +4,7 @@
 runner = 'probe-rs run --chip STM32F446RETx'
 
 [build]
-target = "thumbv7em-none-eabi"
+target = "thumbv7em-none-eabihf"
 
 [env]
 DEFMT_LOG = "trace"
