@@ -792,26 +792,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "87ffaad2263779579369d45f65cad0647c860893d27e4543cdcc1e428d07da2c"
 
 [[package]]
-name = "twinkle_x2_rs"
-version = "0.1.0"
-dependencies = [
- "apa102-spi",
- "cortex-m",
- "cortex-m-rt",
- "defmt",
- "defmt-rtt",
- "embassy-executor",
- "embassy-futures",
- "embassy-stm32",
- "embassy-sync 0.6.1",
- "embassy-time",
- "panic-halt",
- "panic-probe",
- "smart-leds",
- "tinyrand",
-]
-
-[[package]]
 name = "unicode-ident"
 version = "1.0.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -836,4 +816,24 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "de437e2a6208b014ab52972a27e59b33fa2920d3e00fe05026167a1c509d19cc"
 dependencies = [
  "vcell",
+]
+
+[[package]]
+name = "xmas-rustree"
+version = "0.1.0"
+dependencies = [
+ "apa102-spi",
+ "cortex-m",
+ "cortex-m-rt",
+ "defmt",
+ "defmt-rtt",
+ "embassy-executor",
+ "embassy-futures",
+ "embassy-stm32",
+ "embassy-sync 0.6.1",
+ "embassy-time",
+ "panic-halt",
+ "panic-probe",
+ "smart-leds",
+ "tinyrand",
 ]
