@@ -2,6 +2,7 @@
 #![no_main]
 
 mod fmt;
+mod random;
 
 #[cfg(not(feature = "defmt"))]
 use panic_halt as _;
@@ -20,47 +21,49 @@ async fn main(_spawner: Spawner) {
     let p = embassy_stm32::init(Default::default());
     // let mut led = Output::new(p.PA5, Level::High, Speed::Low);
 
-    let spi2 = p.SPI2;
-    let spi2_sck = p.PB13;
-    let spi2_mosi = p.PB15;
-    let spi2_config = spi::Config::default();
-    let spi2_txdma = p.DMA1_CH0;
-    let spi2_rxdma = p.DMA1_CH1;
-
+    let spi1 = p.SPI1;
+    let spi1_sck = p.PA5;
+    let spi1_mosi = p.PA7;
     let spi = spi::Spi::new_txonly(
-        spi2,
-        spi2_sck,
-        spi2_mosi,
-        spi2_txdma,
-        spi2_rxdma,
-        spi2_config,
+        spi1,
+        spi1_sck,
+        spi1_mosi,
+        p.DMA1_CH0,
+        p.DMA1_CH1,
+        spi::Config::default(),
     );
 
     let mut dotstar = apa102_spi::Apa102::new(spi);
 
-    const LED_NUM: usize = 1; // 60
+    const LED_NUM: usize = 100;
     let mut data = [RGB8::default(); LED_NUM];
 
+    let mut rng = random::RNG::new();
+
     loop {
-        for j in 0..256 {
-            for i in 0..LED_NUM {
-                // rainbow cycle using HSV, where hue goes through all colors in circle
-                // value sets the brightness
-                let hsv = Hsv {
-                    hue: ((i * 3 + j) % 256) as u8,
-                    sat: 255,
-                    val: 100,
-                };
+        // for j in 0..256 {
+        for i in 0..LED_NUM {
+            let rn = rng.next_u8();
+            info!("Random number: {}", rn);
 
-                data[i] = hsv2rgb(hsv);
-            }
-            // before writing, apply gamma correction for nicer rainbow
-            dotstar.write(gamma(data.iter().cloned())).unwrap();
+            // rainbow cycle using HSV, where hue goes through all colors in circle
+            // value sets the brightness
+            let hsv = Hsv {
+                // hue: ((i * 3 + j) % 256) as u8,
+                hue: rn,
+                sat: 255,
+                val: 100,
+            };
 
-            // delay.delay_ms(10u8);
-            Timer::after(Duration::from_millis(10)).await;
+            data[i] = hsv2rgb(hsv);
         }
+        // before writing, apply gamma correction for nicer rainbow
+        dotstar.write(gamma(data.iter().cloned())).unwrap();
+
+        // delay.delay_ms(10u8);
+        Timer::after(Duration::from_millis(1000)).await;
     }
+    // }
 
     // loop {
     //     info!("Hello, World!");
