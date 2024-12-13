@@ -1,6 +1,7 @@
 # XMAS-rusTree
 
 Chritsmas tree lights written in Rust.
+Clink thumbnail to viedeo.
 
 [![thubnail](https://img.youtube.com/vi/865onFjWOqE/0.jpg)](https://youtube.com/shorts/865onFjWOqE)
 
