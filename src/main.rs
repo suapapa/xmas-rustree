@@ -13,7 +13,7 @@ use panic_halt as _;
 use {defmt_rtt as _, panic_probe as _};
 
 use embassy_executor::Spawner;
-// use embassy_stm32::gpio::{Level, Output, Speed};
+use embassy_stm32::gpio::{Level, Output, Speed};
 use embassy_stm32::spi;
 use embassy_time::{Duration, Timer};
 // use fmt::info;
@@ -22,7 +22,7 @@ use smart_leds::{gamma, hsv::hsv2rgb, SmartLedsWrite, RGB8};
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
     let p = embassy_stm32::init(Default::default());
-    // let mut led = Output::new(p.PA5, Level::High, Speed::Low);
+    let mut led = Output::new(p.PC13, Level::High, Speed::Low);
 
     let spi1 = p.SPI1;
     let spi1_sck = p.PA5;
@@ -31,8 +31,8 @@ async fn main(_spawner: Spawner) {
         spi1,
         spi1_sck,
         spi1_mosi,
-        p.DMA1_CH0,
-        p.DMA1_CH1,
+        p.DMA1_CH2,
+        p.DMA1_CH3,
         spi::Config::default(),
     );
 
@@ -43,6 +43,8 @@ async fn main(_spawner: Spawner) {
     let mut data = [RGB8::default(); LED_NUM];
     let mut rng = RNG::new();
     loop {
+        led.set_high();
+        // let now = embassy_time::Instant::now();
         for i in 0..LED_NUM {
             if !start[i].is_alive {
                 start[i] = make_star(&mut rng);
@@ -52,8 +54,8 @@ async fn main(_spawner: Spawner) {
         }
         // before writing, apply gamma correction for nicer rainbow
         dotstar.write(gamma(data.iter().cloned())).unwrap();
-
-        Timer::after(Duration::from_millis(10)).await;
+        led.set_low();
+        Timer::after(Duration::from_millis(5)).await;
     }
 }
 

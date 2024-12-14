@@ -3,4 +3,4 @@
 [toolchain]
 channel = "1.80"
 components = ["rust-src", "rustfmt"]
-targets = ["thumbv7em-none-eabi"]
+targets = ["thumbv7m-none-eabi"]

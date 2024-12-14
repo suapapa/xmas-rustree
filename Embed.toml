@@ -1,4 +1,4 @@
 # This file was automatically generated.
 
 [default.general]
-chip = "STM32F446RETx"
+chip = "STM32F103C8"

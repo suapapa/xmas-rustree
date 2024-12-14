@@ -1,7 +1,7 @@
 {
   "configurations": [
     {
-      "chip": "STM32F446RETx",
+      "chip": "STM32F103C8",
       "consoleLogLevel": "Console",
       "coreConfigs": [
         {
